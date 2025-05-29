@@ -1,17 +1,18 @@
 {
   "name": "dmall-aka",
   "version": "1.0.0",
+  "description": "Outil Discord pour DM tous ses amis",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "author": "",
+  "keywords": ["discord", "selfbot", "dm", "aka", "meuhq"],
+  "author": "meuhq (AKA)",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "axios": "^1.9.0",
     "chalk": "^4.1.2",
-    "discord.js-selfbot-v13": "^3.6.1",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "discord.js-selfbot-v13": "^3.6.1"
   }
 }
